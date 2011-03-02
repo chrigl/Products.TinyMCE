@@ -75,6 +75,10 @@ var SearchReplaceDialog = {
 						r.select();
 						replace();
 						fo = 1;
+						
+						if (b) {
+							r.moveEnd("character", -(rs.length)); // Otherwise will loop forever
+						}
 					}
 
 					tinyMCEPopup.storeSelection();
@@ -101,6 +105,10 @@ var SearchReplaceDialog = {
 
 		se.collapse(b);
 		r = se.getRng();
+
+		if (tinymce.isIE) {
+			r = ed.getDoc().selection.createRange();
+		}
 
 		// Whats the point
 		if (!s)

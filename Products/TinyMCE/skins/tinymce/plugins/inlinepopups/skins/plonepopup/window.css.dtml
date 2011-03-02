@@ -109,4 +109,14 @@
 .plonepopup .mceConfirm .mceCancel {left:12px; top:auto}
 .plonepopup .mceConfirm .mceIcon {display: none;}
 
+/* IE9 fixes */
+.plonepopup.ie9 .mceTop .mceCenter {clip:auto;}
+.plonepopup.ie9 .mceMiddle {clip:auto;}
+.plonepopup.ie9 .mceMiddle .mceLeft, .plonepopup.ie9 .mceMiddle .mceRight {top: 23px;}
+.plonepopup.ie9 .mceAlert .mceMiddle span, .plonepopup.ie9 .mceConfirm .mceMiddle span {top:13px;}
+.plonepopup.ie9 .mceModal .mceMiddle {top:23px}
+.plonepopup.ie9 .mceModal .mceMiddle .mceLeft, .plonepopup.ie9 .mceModal .mceMiddle .mceRight {top: 0}
+.plonepopup.ie9 .mceMiddle .mceIcon {top:13px}
+.plonepopup.ie9 .mceTop .mceCenter {top:0; right:auto; left:6px; width:calc(100%-12px)}
+
 /* </dtml-with> */

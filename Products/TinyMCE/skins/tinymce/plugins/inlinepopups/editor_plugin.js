@@ -13,7 +13,7 @@
 			// Replace window manager
 			ed.onBeforeRenderUI.add(function() {
 				ed.windowManager = new tinymce.InlineWindowManager(ed);
-				DOM.loadCSS(url + '/skins/' + (ed.settings.inlinepopups_skin || 'clearlooks2') + "/window.css");
+				DOM.loadCSS(url + '/skins/' + (ed.settings.inlinepopups_skin || 'plonepopup') + "/window.css");
 			});
 		},
 
@@ -104,7 +104,7 @@
 
 			// Create DOM objects
 			t._addAll(DOM.doc.body, 
-				['div', {id : id, 'class' : ed.settings.inlinepopups_skin || 'clearlooks2', style : 'width:100px;height:100px'}, 
+				['div', {id : id, 'class' : (ed.settings.inlinepopups_skin || 'plonepopup') + (tinymce.isIE && window.getSelection ? ' ie9' : ''), style : 'width:100px;height:100px'},
 					['div', {id : id + '_wrapper', 'class' : 'mceWrapper' + opt},
 						['div', {id : id + '_top', 'class' : 'mceTop'}, 
 							['div', {'class' : 'mceLeft'}],
