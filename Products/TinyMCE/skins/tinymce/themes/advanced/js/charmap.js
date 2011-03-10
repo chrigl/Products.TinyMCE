@@ -1,3 +1,13 @@
+/**
+ * charmap.js
+ *
+ * Copyright 2009, Moxiecode Systems AB
+ * Released under LGPL License.
+ *
+ * License: http://tinymce.moxiecode.com/license
+ * Contributing: http://tinymce.moxiecode.com/contributing
+ */
+
 tinyMCEPopup.requireLangPack();
 
 var charmap = [
@@ -163,7 +173,7 @@ var charmap = [
 	['&yacute;',  '&#253;',  true, 'y - acute'],
 	['&thorn;',   '&#254;',  true, 'thorn'],
 	['&yuml;',    '&#255;',  true, 'y - diaeresis'],
-    ['&Alpha;',   '&#913;',  true, 'Alpha'],
+	['&Alpha;',   '&#913;',  true, 'Alpha'],
 	['&Beta;',    '&#914;',  true, 'Beta'],
 	['&Gamma;',   '&#915;',  true, 'Gamma'],
 	['&Delta;',   '&#916;',  true, 'Delta'],
@@ -265,46 +275,52 @@ var charmap = [
 
 tinyMCEPopup.onInit.add(function() {
 	tinyMCEPopup.dom.setHTML('charmapView', renderCharMapHTML());
+	addKeyboardNavigation();
 });
+
+function addKeyboardNavigation(){
+	var tableElm, cells, settings;
+
+	cells = tinyMCEPopup.dom.select(".charmaplink", "charmapgroup");
+
+	settings ={
+		root: "charmapgroup",
+		items: cells
+	};
+
+	tinyMCEPopup.editor.windowManager.createInstance('tinymce.ui.KeyboardNavigation', settings, tinyMCEPopup.dom);
+}
 
 function renderCharMapHTML() {
 	var charsPerRow = 20, tdWidth=20, tdHeight=20, i;
-	var html = '<table class="listing">';
-	html += '<tr ><th colspan="' + (charsPerRow + 1) + '">' + tinyMCEPopup.editor.getLang("advanced_dlg.charmap_title") + '</th>';
-	html += '<tr class="odd" height="' + tdHeight + '">';
+	var html = '<div id="charmapgroup" aria-labelledby="charmap_label" tabindex="0" role="listbox">'+
+	'<table role="presentation" border="0" cellspacing="1" cellpadding="0" width="' + (tdWidth*charsPerRow) + 
+	'"><tr height="' + tdHeight + '">';
 	var cols=-1;
 
 	for (i=0; i<charmap.length; i++) {
+		var previewCharFn;
+
 		if (charmap[i][2]==true) {
 			cols++;
+			previewCharFn = 'previewChar(\'' + charmap[i][1].substring(1,charmap[i][1].length) + '\',\'' + charmap[i][0].substring(1,charmap[i][0].length) + '\',\'' + charmap[i][3] + '\');';
 			html += ''
-				+ '<td width="' + tdWidth + '">'
-				+ '<a onmouseover="previewChar(\'' + charmap[i][1].substring(1,charmap[i][1].length) + '\',\'' + charmap[i][0].substring(1,charmap[i][0].length) + '\',\'' + charmap[i][3] + '\');" onfocus="previewChar(\'' + charmap[i][1].substring(1,charmap[i][1].length) + '\',\'' + charmap[i][0].substring(1,charmap[i][0].length) + '\',\'' + charmap[i][3] + '\');" href="javascript:void(0)" onclick="insertChar(\'' + charmap[i][1].substring(2,charmap[i][1].length-1) + '\');" onclick="return false;" onmousedown="return false;" title="' + charmap[i][3] + '">'
+				+ '<td class="charmap">'
+				+ '<a class="charmaplink" role="button" onmouseover="'+previewCharFn+'" onfocus="'+previewCharFn+'" href="javascript:void(0)" onclick="insertChar(\'' + charmap[i][1].substring(2,charmap[i][1].length-1) + '\');" onclick="return false;" onmousedown="return false;" title="' + charmap[i][3] + '">'
 				+ charmap[i][1]
 				+ '</a></td>';
-			if ((cols+1) % charsPerRow == 0) {
-				if ((cols+1) == charsPerRow) {
-					html += '<td rowspan="10">';
-					html += '<div style="width: 110px; height: 55px; font-size: 400%;" id="codeV">&nbsp</div>';
-					html += '<div style="height: 50px;" id="codeN">&nbsp</div>';
-					html += '<label>HTML-Code</label>';
-					html += '<div style="height: 30px;" id="codeA">&nbsp</div>';
-					html += '<label>NUM-Code</label>';
-					html += '<div style="height: 30px;" id="codeB">&nbsp</div>';
-					html += '</td>';
-				}
-				html += '</tr><tr class="' + (((cols+1) / charsPerRow) % 2 == 0 ? 'odd' : 'even') + '" height="' + tdHeight + '">';
-			}
+			if ((cols+1) % charsPerRow == 0)
+				html += '</tr><tr height="' + tdHeight + '">';
 		}
 	 }
 
 	if (cols % charsPerRow > 0) {
 		var padd = charsPerRow - (cols % charsPerRow);
 		for (var i=0; i<padd-1; i++)
-			html += '<td width="' + tdWidth + '">&nbsp;</td>';
+			html += '<td width="' + tdWidth + '" height="' + tdHeight + '" class="charmap">&nbsp;</td>';
 	}
 
-	html += '</tr></table>';
+	html += '</tr></table></div>';
 
 	return html;
 }

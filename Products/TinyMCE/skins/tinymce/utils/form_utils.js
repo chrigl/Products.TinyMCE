@@ -1,19 +1,24 @@
 /**
- * $Id: form_utils.js 1184 2009-08-11 11:47:27Z spocke $
+ * form_utils.js
  *
- * Various form utilitiy functions.
+ * Copyright 2009, Moxiecode Systems AB
+ * Released under LGPL License.
  *
- * @author Moxiecode
- * @copyright Copyright © 2004-2008, Moxiecode Systems AB, All rights reserved.
+ * License: http://tinymce.moxiecode.com/license
+ * Contributing: http://tinymce.moxiecode.com/contributing
  */
 
 var themeBaseURL = tinyMCEPopup.editor.baseURI.toAbsolute('themes/' + tinyMCEPopup.getParam("theme"));
 
 function getColorPickerHTML(id, target_form_element) {
-	var h = "";
+	var h = "", dom = tinyMCEPopup.dom;
 
-	h += '<a id="' + id + '_link" href="javascript:;" onclick="tinyMCEPopup.pickColor(event,\'' + target_form_element +'\');" onmousedown="return false;" class="pickcolor">';
-	h += '<span id="' + id + '" title="' + tinyMCEPopup.getLang('browse') + '">&nbsp;</span></a>';
+	if (label = dom.select('label[for=' + target_form_element + ']')[0]) {
+		label.id = label.id || dom.uniqueId();
+	}
+
+	h += '<a role="button" aria-labelledby="' + id + '_label" id="' + id + '_link" href="javascript:;" onclick="tinyMCEPopup.pickColor(event,\'' + target_form_element +'\');" onmousedown="return false;" class="pickcolor">';
+	h += '<span id="' + id + '" title="' + tinyMCEPopup.getLang('browse') + '">&nbsp;<span id="' + id + '_label" class="mceVoiceLabel mceIconOnly" style="display:none;">' + tinyMCEPopup.getLang('browse') + '</span></span></a>';
 
 	return h;
 }
@@ -65,6 +70,9 @@ function openBrowser(img_id, target_form_element, type, option) {
 function selectByValue(form_obj, field_name, value, add_custom, ignore_case) {
 	if (!form_obj || !form_obj.elements[field_name])
 		return;
+
+	if (!value)
+		value = "";
 
 	var sel = form_obj.elements[field_name];
 
@@ -133,8 +141,7 @@ function addClassesToList(list_id, specific_option) {
 function isVisible(element_id) {
 	var elm = document.getElementById(element_id);
 
-	// elm.style.display can be an empty string if the panel is hidden and has never been shown
-	return elm && (elm.style.display == "block" || elm.style.display == "inline" || elm.style.display == "list-element");
+	return elm && elm.style.display != "none";
 }
 
 function convertRGBToHex(col) {

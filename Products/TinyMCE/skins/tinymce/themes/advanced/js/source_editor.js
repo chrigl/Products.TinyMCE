@@ -15,7 +15,6 @@ function onLoadInit() {
 
 	document.getElementById('htmlSource').value = tinyMCEPopup.editor.getContent({source_view : true});
 
-
 	if (tinyMCEPopup.editor.getParam("theme_advanced_source_editor_wrap", true)) {
 		setWrap('soft');
 		document.getElementById('wraped').checked = true;
@@ -45,18 +44,13 @@ function toggleWordWrap(elm) {
 		setWrap('off');
 }
 
-var wHeight=0, wWidth=0, owHeight=0, owWidth=0;
-
 function resizeInputs() {
-	var el = document.getElementById('htmlSource');
+	var vp = tinyMCEPopup.dom.getViewPort(window), el;
 
-	if (!tinymce.isIE) {
-		wHeight = self.innerHeight - 170;
-		wWidth = self.innerWidth - 48;
-		el.style.height = Math.abs(wHeight) + 'px';
-		el.style.width  = Math.abs(wWidth) + 'px';
-	} else {
-		wHeight = document.body.clientHeight - 170;
-		wWidth = document.body.clientWidth - 52;
+	el = document.getElementById('htmlSource');
+
+	if (el) {
+		el.style.width = (vp.w - 20) + 'px';
+		el.style.height = (vp.h - 65) + 'px';
 	}
 }
