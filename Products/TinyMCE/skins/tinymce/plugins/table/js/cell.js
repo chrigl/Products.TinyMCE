@@ -11,7 +11,7 @@ function init() {
 	document.getElementById('bgcolor_pickcontainer').innerHTML = getColorPickerHTML('bgcolor_pick','bgcolor')
 
 	var inst = ed;
-	var tdElm = ed.dom.getParent(ed.selection.getNode(), "td,th");
+	var tdElm = ed.dom.getParent(ed.selection.getStart(), "td,th");
 	var formObj = document.forms[0];
 	var st = ed.dom.parseStyle(ed.dom.getAttrib(tdElm, "style"));
 
@@ -21,7 +21,7 @@ function init() {
 	var height = trimSize(getStyle(tdElm, 'height', 'height'));
 	var bordercolor = convertRGBToHex(getStyle(tdElm, 'bordercolor', 'borderLeftColor'));
 	var bgcolor = convertRGBToHex(getStyle(tdElm, 'bgcolor', 'backgroundColor'));
-	var backgroundimage = getStyle(tdElm, 'background', 'backgroundImage').replace(new RegExp("url\\('?([^']*)'?\\)", 'gi'), "$1");;
+	var backgroundimage = getStyle(tdElm, 'background', 'backgroundImage').replace(new RegExp("url\\(['\"]?([^'\"]*)['\"]?\\)", 'gi'), "$1");
 	var id = ed.dom.getAttrib(tdElm, 'id');
 	var lang = ed.dom.getAttrib(tdElm, 'lang');
 	var dir = ed.dom.getAttrib(tdElm, 'dir');
@@ -30,34 +30,51 @@ function init() {
 	// Setup form
 	TinyMCE_EditableSelects.init();
 
-	formObj.bordercolor.value = bordercolor;
-	formObj.bgcolor.value = bgcolor;
-	formObj.backgroundimage.value = backgroundimage;
-	formObj.width.value = width;
-	formObj.height.value = height;
-	formObj.id.value = id;
-	formObj.lang.value = lang;
-	formObj.style.value = ed.dom.serializeStyle(st);
-	selectByValue(formObj, 'valign', valign);
-	selectByValue(formObj, 'dir', dir);
-	selectByValue(formObj, 'scope', scope);
-
-	// Resize some elements
-	if (isVisible('backgroundimagebrowser'))
-		document.getElementById('backgroundimage').style.width = '180px';
-
-	updateColor('bordercolor_pick', 'bordercolor');
-	updateColor('bgcolor_pick', 'bgcolor');
+	if (!ed.dom.hasClass(tdElm, 'mceSelected')) {
+		formObj.bordercolor.value = bordercolor;
+		formObj.bgcolor.value = bgcolor;
+		formObj.backgroundimage.value = backgroundimage;
+		formObj.width.value = width;
+		formObj.height.value = height;
+		formObj.id.value = id;
+		formObj.lang.value = lang;
+		formObj.style.value = ed.dom.serializeStyle(st);
+		selectByValue(formObj, 'valign', valign);
+		selectByValue(formObj, 'dir', dir);
+		selectByValue(formObj, 'scope', scope);
+	
+		// Resize some elements
+		if (isVisible('backgroundimagebrowser'))
+			document.getElementById('backgroundimage').style.width = '180px';
+	
+		updateColor('bordercolor_pick', 'bordercolor');
+		updateColor('bgcolor_pick', 'bgcolor');
+	} else
+		tinyMCEPopup.dom.hide('action');
 }
 
 function updateAction() {
 	var el, inst = ed, tdElm, trElm, tableElm, formObj = document.forms[0];
 
 	tinyMCEPopup.restoreSelection();
-	el = ed.selection.getNode();
+	el = ed.selection.getStart();
 	tdElm = ed.dom.getParent(el, "td,th");
 	trElm = ed.dom.getParent(el, "tr");
 	tableElm = ed.dom.getParent(el, "table");
+
+	// Cell is selected
+	if (ed.dom.hasClass(tdElm, 'mceSelected')) {
+		// Update all selected sells
+		tinymce.each(ed.dom.select('td.mceSelected,th.mceSelected'), function(td) {
+			updateCell(td);
+		});
+
+		ed.addVisual();
+		ed.nodeChanged();
+		inst.execCommand('mceEndUndoLevel');
+		tinyMCEPopup.close();
+		return;
+	}
 
 	ed.execCommand('mceBeginUndoLevel');
 

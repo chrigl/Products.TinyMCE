@@ -8,7 +8,7 @@
 </head>
 <body>
 	<div class="dialog-wrapper" id="content">
-		<form onsubmit="mergeCells();return false;" action="#">
+		<form onsubmit="MergeCellsDialog.merge();return false;" action="#">
 			<fieldset>
 				<legend i18n:translate="table_dlg_merge_cells_title"></legend>
 				<div class="field">
