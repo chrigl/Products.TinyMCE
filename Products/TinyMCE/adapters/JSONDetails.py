@@ -11,6 +11,8 @@ from Products.CMFCore.utils import getToolByName
 from Products.TinyMCE.adapters.interfaces.JSONDetails import IJSONDetails
 from Products.TinyMCE.interfaces.utility import ITinyMCE
 
+from plone.outputfilters.browser.resolveuid import uuidFor
+
 
 class JSONDetails(object):
     """Return details of the current object in JSON"""
@@ -34,7 +36,7 @@ class JSONDetails(object):
         results['description'] = self.context.Description()
 
         if self.context.portal_type in image_portal_types:
-            image_url = self._getPloneUrl() + '/resolveuid/' + self.context.UID()
+            image_url = self._getPloneUrl() + '/resolveuid/' + uuidFor(self.context)
             field_name = 'image'
             images = self.context.restrictedTraverse('@@images')
 
@@ -59,9 +61,15 @@ class JSONDetails(object):
             results['anchors'] = content_anchors.listAnchorNames()
         else:
             results['anchors'] = []
+        results.update(self.additionalDetails())
 
         return json.dumps(results)
-
+    
+    def additionalDetails(self):
+        """Hook to allow subclasses to supplement or override the default set of results
+        """
+        return {}
+    
     def _getPloneUrl(self):
         """Return the URL corresponding to the root of the Plone site."""
         portal_url = getToolByName(self.context, 'portal_url')

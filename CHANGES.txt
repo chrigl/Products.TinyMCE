@@ -2,8 +2,50 @@
 HISTORY
 =======
 
-1.2.4 (unreleased)
+1.3 (unreleased)
+----------------
+
+- update tinymce to 3.4.2 with all languages and plugins
+  [toutpt]
+
+1.2.7 (unreleased)
 ------------------
+
+- Add hook to JSONDetails to allow subclasses to supplement or override the results
+  [anthonygerrard]
+
+1.2.6 (2011-05-12)
+------------------
+- Changed the color of the background on the external editor to light gray to make the buttons more visible.
+  [davidjonas]
+
+1.2.5 (2011-05-12)
+------------------
+
+- Add a CSS class to the `Edit without visual editor` note.
+  [hannosch]
+
+- Avoid determining content type as text/plain on Dexterity add views.
+  [davisagli]
+
+- In the link "Edit without visual editor", append existing url-parameters.
+  Fixes https://dev.plone.org/plone/ticket/11632
+  [WouterVH]
+
+
+1.2.4 (2011-03-22)
+------------------
+
+- Use uuidFor(obj) from plone.outputfilters instead of obj.UID() for
+  plone.uuid compatibility.
+  [elro]
+
+- Internationalization fixes.
+  [thomasdesvenain]
+
+- Allows to use tinymce wysiwyg support outside of an Archetypes context.
+  (Checks 'force_wysiwyg' variable value to check if wysiwyg support is enabled.)
+  [thomasdesvenain]
 
 - Don't acquire when determining the mimetype of the field being edited.
   [davisagli]
@@ -73,7 +115,7 @@ HISTORY
 - Set text/css content type on tinymce-getstyle.
   [elro]
 
-- Add option 'auto' for directivity. The directivity will be set depending 
+- Add option 'auto' for directivity. The directivity will be set depending
   on the content or the portals default language.
   Fixes http://dev.plone.org/plone/ticket/10039
   [csenger]
