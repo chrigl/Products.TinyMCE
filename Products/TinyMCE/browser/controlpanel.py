@@ -9,8 +9,7 @@ from Products.TinyMCE.interfaces.utility import ITinyMCELibraries
 from Products.TinyMCE.interfaces.utility import ITinyMCEResourceTypes
 
 from Products.TinyMCE.browser.interfaces.controlpanel import ITinyMCEControlPanelForm
-
-_ = MessageFactory('plone.tinymce')
+from Products.TinyMCE import TMCEMessageFactory as _
 
 
 class TinyMCEControlPanelForm(ControlPanelForm):
@@ -34,9 +33,9 @@ class TinyMCEControlPanelForm(ControlPanelForm):
     tinymceresourcetypes.label = _(u'Resource Types')
 
     form_fields = FormFieldsets(
-                        tinymcelayout, 
-                        tinymcetoolbar, 
-                        tinymceresourcetypes, 
+                        tinymcelayout,
+                        tinymcetoolbar,
+                        tinymceresourcetypes,
                         tinymcelibraries
                         )
 

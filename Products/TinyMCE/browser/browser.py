@@ -2,11 +2,11 @@ import httplib
 
 from zope.interface import implements
 from zope.component import getUtility
-from AccessControl import ClassSecurityInfo
 
 from Products.Five.browser import BrowserView
 
-from Products.TinyMCE.adapters.interfaces.JSONFolderListing import IJSONFolderListing
+from Products.TinyMCE.adapters.interfaces.JSONFolderListing import \
+     IJSONFolderListing
 from Products.TinyMCE.adapters.interfaces.JSONSearch import IJSONSearch
 from Products.TinyMCE.adapters.interfaces.JSONDetails import IJSONDetails
 from Products.TinyMCE.adapters.interfaces.Upload import IUpload
@@ -14,6 +14,7 @@ from Products.TinyMCE.adapters.interfaces.Save import ISave
 from Products.TinyMCE.browser.interfaces.browser import ITinyMCEBrowserView
 from Products.TinyMCE.browser.interfaces.browser import IATDProxyView
 from Products.TinyMCE.interfaces.utility import ITinyMCE
+
 
 class TinyMCEBrowserView(BrowserView):
     """TinyMCE Browser View"""
@@ -30,7 +31,7 @@ class TinyMCEBrowserView(BrowserView):
 
         object = ISave(self.context)
         return object.save(text, fieldname)
-    
+
     def setDescription(self, description):
         """Sets the description of an inserted image"""
 
@@ -45,8 +46,11 @@ class TinyMCEBrowserView(BrowserView):
         utility = getUtility(ITinyMCE)
         linkable_portal_types = utility.linkable.split('\n')
 
-        object = IJSONFolderListing(self.context)
-        results = object.getListing(linkable_portal_types, rooted, document_base_url, 'File') 
+        object = IJSONFolderListing(self.context, None)
+        if object is None:
+            return ''
+        results = object.getListing(linkable_portal_types, rooted,
+                                    document_base_url, 'File')
         return results
 
     def jsonImageFolderListing(self, rooted, document_base_url):
@@ -56,8 +60,11 @@ class TinyMCEBrowserView(BrowserView):
         image_portal_types = utility.imageobjects.split('\n')
         image_portal_types.extend(utility.containsobjects.split('\n'))
 
-        object = IJSONFolderListing(self.context)
-        results = object.getListing(image_portal_types, rooted, document_base_url, 'Image')
+        object = IJSONFolderListing(self.context, None)
+        if object is None:
+            return ''
+        results = object.getListing(image_portal_types, rooted,
+                                    document_base_url, 'Image')
         return results
 
     def jsonLinkableSearch(self, searchtext):
@@ -67,7 +74,9 @@ class TinyMCEBrowserView(BrowserView):
         linkable_portal_types = utility.linkable.split('\n')
         linkable_portal_types.extend(utility.containsobjects.split('\n'))
 
-        object = IJSONSearch(self.context)
+        object = IJSONSearch(self.context, None)
+        if object is None:
+            return ''
         results = object.getSearchResults(linkable_portal_types, searchtext)
         return results
 
@@ -78,14 +87,18 @@ class TinyMCEBrowserView(BrowserView):
         image_portal_types = utility.imageobjects.split('\n')
         image_portal_types.extend(utility.containsobjects.split('\n'))
 
-        object = IJSONSearch(self.context)
+        object = IJSONSearch(self.context, None)
+        if object is None:
+            return ''
         results = object.getSearchResults(image_portal_types, searchtext)
         return results
 
     def jsonDetails(self):
         """Returns the details of an object in JSON"""
 
-        object = IJSONDetails(self.context)
+        object = IJSONDetails(self.context, None)
+        if object is None:
+            return ''
         return object.getDetails()
 
     def jsonConfiguration(self, fieldname):
@@ -97,7 +110,7 @@ class TinyMCEBrowserView(BrowserView):
 
 
 class ATDProxyView(object):
-    """ Proxy for the 'After the Deadline" spellchecker
+    """ Proxy for the 'After the Deadline' spellchecker
     """
     implements(IATDProxyView)
 
@@ -115,12 +128,13 @@ class ATDProxyView(object):
         response = service.getresponse()
         service.close()
 
-        if response.status <> httplib.OK:
-            raise Exception('Unexpected response code from AtD service %d' % response.status)
+        if response.status != httplib.OK:
+            raise Exception('Unexpected response code from AtD service %d' %
+                            response.status)
 
-        self.request.RESPONSE.setHeader('content-type', 'text/xml;charset=utf-8')
-        respxml = response.read() 
-        xml = respxml.strip().replace("\r", '').replace("\n", '').replace('>  ', '>')
+        self.request.RESPONSE.setHeader('content-type',
+                                        'text/xml;charset=utf-8')
+        respxml = response.read()
+        xml = respxml.strip().replace("\r", '').replace("\n", '').replace(
+            '>  ', '>')
         return xml
-
-        
