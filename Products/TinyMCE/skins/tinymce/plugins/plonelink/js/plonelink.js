@@ -132,6 +132,7 @@ function init() {
                 setFormValue('externalurl', href, 0);
             }
         } else {
+	    displayPanel('internal_panel'); 
             getCurrentFolderListing();
         }
     }
