@@ -30,7 +30,8 @@ MCTabs.prototype.getParam = function(name, default_value) {
 };
 
 MCTabs.prototype.showTab =function(tab){
-	tab.className = 'current';
+        // tab.className = 'current';
+        tab.firstChild.className = 'selected';
 	tab.setAttribute("aria-selected", true);
 	tab.setAttribute("aria-expanded", true);
 	tab.tabIndex = 0;
@@ -39,19 +40,22 @@ MCTabs.prototype.showTab =function(tab){
 MCTabs.prototype.hideTab =function(tab){
 	var t=this;
 
-	tab.className = '';
+	//tab.className = '';
+	tab.firstChild.className = '';
 	tab.setAttribute("aria-selected", false);
 	tab.setAttribute("aria-expanded", false);
 	tab.tabIndex = -1;
 };
 
 MCTabs.prototype.showPanel = function(panel) {
-	panel.className = 'current'; 
+	//panel.className = 'current'; 
+        panel.style.display = 'block';
 	panel.setAttribute("aria-hidden", false);
 };
 
 MCTabs.prototype.hidePanel = function(panel) {
-	panel.className = 'panel';
+	//panel.className = 'panel';
+        panel.style.display = 'none';
 	panel.setAttribute("aria-hidden", true);
 }; 
 
@@ -92,7 +96,7 @@ MCTabs.prototype.displayTab = function(tab_id, panel_id, avoid_focus) {
 
 		// Hide all other panels
 		for (i = 0; i < nodes.length; i++) {
-			if (nodes[i].nodeName == "DIV")
+			if (nodes[i].nodeName == 'FIELDSET')
 				t.hidePanel(nodes[i]);
 		}
 
