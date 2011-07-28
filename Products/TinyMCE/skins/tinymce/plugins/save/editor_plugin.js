@@ -18,7 +18,14 @@
 			t.editor = ed;
 
 			// Register commands
+		        // The normal TinyMCE registration
 			//ed.addCommand('mceSave', t._save, t);
+
+		    // PLEASE NOTE that this is a completely custom
+		    // asychronous 'save' function that does not exist as part
+		    // of the normal TinyMCE distribution.
+		    // As a result, none of the other functions listed below
+		    // this init method are actually used.
 		    ed.addCommand('mceSave', function() {
 			var id = ed.id;
 			if (ed.id == 'mce_fullscreen') {

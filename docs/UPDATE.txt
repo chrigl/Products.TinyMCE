@@ -1,0 +1,20 @@
+UPDATING
+============
+
+This file is a work-in-progress attempt to document some of the steps taken to re-ploneify this egg after upgrading TinyMCE.
+
+Upgrade steps to 3.4.0:
+
+- Added manual call to 'displayPanel' in plonelink plugin to resolve issues in IE9 (mattss)
+http://dev.plone.org/collective/changeset/242822/Products.TinyMCE/branches
+
+- Restored 'hidden' styles for table plugin (mattss)
+http://dev.plone.org/collective/changeset/242823/Products.TinyMCE/branches
+
+- Updated 'mctabs' utility to support plone's formTab fieldset styles (mattss)
+http://dev.plone.org/collective/changeset/242828/Products.TinyMCE/branches
+
+- Restored the custom 'AJAX save' functionality on the save plugin (mattss)
+http://dev.plone.org/collective/changeset/242831/Products.TinyMCE/branches
+
+
