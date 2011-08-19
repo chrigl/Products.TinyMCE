@@ -7,6 +7,8 @@ HISTORY
 
 - update tinymce to 3.4.2 with all languages and plugins
   [toutpt]
+- Fixing issue with adding internal links
+  [mattss]
 
 1.2.7 (2011-07-05)
 ------------------
