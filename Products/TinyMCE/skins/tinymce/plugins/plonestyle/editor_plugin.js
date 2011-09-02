@@ -166,6 +166,9 @@
             var p = e;
             while (!this._inArray(p.nodeName.toLowerCase(), a)) {
                 p = p.parentNode;
+                if (p === null){
+                    return false;
+                }
             }
             if (p.nodeName.toLowerCase() == "body") {
                 return false;
