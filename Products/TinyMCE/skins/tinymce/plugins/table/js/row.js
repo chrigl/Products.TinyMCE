@@ -29,7 +29,7 @@ function init() {
 	// Any cells selected
 	if (dom.select('td.mceSelected,th.mceSelected', trElm).length == 0) {
 		// Setup form
-		addClassesToList('class', 'table_row_styles');
+		//addClassesToList('class', 'table_row_styles');
 		TinyMCE_EditableSelects.init();
 
 		formObj.bgcolor.value = bgcolor;
