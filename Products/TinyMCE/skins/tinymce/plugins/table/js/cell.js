@@ -17,7 +17,7 @@ function init() {
 
 	// Get table cell data
 	var celltype = tdElm.nodeName.toLowerCase();
-	var align = ed.dom.getAttrib(tdElm, 'align');
+	//var align = ed.dom.getAttrib(tdElm, 'align');
 	var valign = ed.dom.getAttrib(tdElm, 'valign');
 	var width = trimSize(getStyle(tdElm, 'width', 'width'));
 	var height = trimSize(getStyle(tdElm, 'height', 'height'));
@@ -31,7 +31,7 @@ function init() {
 	var scope = ed.dom.getAttrib(tdElm, 'scope');
 
 	// Setup form
-	addClassesToList('class', 'table_cell_styles');
+	//addClassesToList('class', 'table_cell_styles');
 	TinyMCE_EditableSelects.init();
 
 	if (!ed.dom.hasClass(tdElm, 'mceSelected')) {
@@ -43,7 +43,7 @@ function init() {
 		formObj.id.value = id;
 		formObj.lang.value = lang;
 		formObj.style.value = ed.dom.serializeStyle(st);
-		selectByValue(formObj, 'align', align);
+		//selectByValue(formObj, 'align', align);
 		selectByValue(formObj, 'valign', valign);
 		selectByValue(formObj, 'class', className, true, true);
 		selectByValue(formObj, 'celltype', celltype);
@@ -166,7 +166,7 @@ function updateCell(td, skip_id) {
 	if (!skip_id)
 		dom.setAttrib(td, 'id', formObj.id.value);
 
-	dom.setAttrib(td, 'align', formObj.align.value);
+	//dom.setAttrib(td, 'align', formObj.align.value);
 	dom.setAttrib(td, 'vAlign', formObj.valign.value);
 	dom.setAttrib(td, 'lang', formObj.lang.value);
 	dom.setAttrib(td, 'dir', getSelectValue(formObj, 'dir'));
@@ -198,7 +198,7 @@ function updateCell(td, skip_id) {
 	else
 		td.style.backgroundImage = '';
 
-	if (curCellType != celltype) {
+	if (celltype && (curCellType != celltype)) {
 		// changing to a different node type
 		var newCell = doc.createElement(celltype);
 
